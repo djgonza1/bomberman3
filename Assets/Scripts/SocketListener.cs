@@ -207,6 +207,10 @@ public static string guiDebugStr = "";
 				if(clientInfo.client == client)
 				{
 					clientInfo.session = int.Parse(token[1]);
+					if(ServerLevelManager.instance.sessionMap.ContainsKey(clientInfo.session))
+					{
+						
+					}
 				}
 			}
 					

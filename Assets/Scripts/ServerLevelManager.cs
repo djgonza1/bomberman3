@@ -56,6 +56,8 @@ public class ServerLevelManager : MonoBehaviour
 		sessionMap = new Dictionary<int,List<ServerPlayer>>();
 		sessionMap.Add(1, playerList);
 		sessionMap.Add(2, new List<ServerPlayer>());
+		sessionMap.Add(3, new List<ServerPlayer>());
+		sessionMap.Add(4, new List<ServerPlayer>());
 		
 	}
 	// Use this for initialization
@@ -215,44 +217,61 @@ public class ServerLevelManager : MonoBehaviour
 	public void SetPlayerStartPosition(GameObject gameObj, int playerNum, int session)
 	{
 		float offset = (session-1)*13;
-		if(session == 1)
+		if(playerNum == 1)
 		{
-			if(playerNum == 1)
-			{
-				gameObj.transform.position = new Vector2(1+offset,9);
-			}
-			else if(playerNum == 2)
-			{
-				gameObj.transform.position = new Vector2(1+offset,1);
-			}
-			else if(playerNum == 3)
-			{
-				gameObj.transform.position = new Vector2(11+offset,9);
-			}
-			else if(playerNum == 4)
-			{
-				gameObj.transform.position = new Vector2(11+offset,1);
-			}
+			gameObj.transform.position = new Vector2(1+offset,9);
 		}
-		else if(session == 2)
+		else if(playerNum == 2)
 		{
-			if(playerNum == 1)
-			{
-				gameObj.transform.position = new Vector2(1+offset,9);
-			}
-			else if(playerNum == 2)
-			{
-				gameObj.transform.position = new Vector2(1+offset,1);
-			}
-			else if(playerNum == 3)
-			{
-				gameObj.transform.position = new Vector2(11+offset,9);
-			}
-			else if(playerNum == 4)
-			{
-				gameObj.transform.position = new Vector2(11+offset,1);
-			}
+			gameObj.transform.position = new Vector2(1+offset,1);
 		}
+		else if(playerNum == 3)
+		{
+			gameObj.transform.position = new Vector2(11+offset,9);
+		}
+		else if(playerNum == 4)
+		{
+			gameObj.transform.position = new Vector2(11+offset,1);
+		}
+		
+//		if(session == 1)
+//		{
+//			if(playerNum == 1)
+//			{
+//				gameObj.transform.position = new Vector2(1+offset,9);
+//			}
+//			else if(playerNum == 2)
+//			{
+//				gameObj.transform.position = new Vector2(1+offset,1);
+//			}
+//			else if(playerNum == 3)
+//			{
+//				gameObj.transform.position = new Vector2(11+offset,9);
+//			}
+//			else if(playerNum == 4)
+//			{
+//				gameObj.transform.position = new Vector2(11+offset,1);
+//			}
+//		}
+//		else if(session == 2)
+//		{
+//			if(playerNum == 1)
+//			{
+//				gameObj.transform.position = new Vector2(1+offset,9);
+//			}
+//			else if(playerNum == 2)
+//			{
+//				gameObj.transform.position = new Vector2(1+offset,1);
+//			}
+//			else if(playerNum == 3)
+//			{
+//				gameObj.transform.position = new Vector2(11+offset,9);
+//			}
+//			else if(playerNum == 4)
+//			{
+//				gameObj.transform.position = new Vector2(11+offset,1);
+//			}
+//		}
 	
 	}
 	
