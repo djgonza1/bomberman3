@@ -91,7 +91,8 @@ public class AsynchronousClient : MonoBehaviour{
 
 	public string playername;
 	public int session = 0;
-
+	
+	public int playerNum = 0;
 	
 	void Awake()
 	{
@@ -478,7 +479,8 @@ public class AsynchronousClient : MonoBehaviour{
 		}
 		else
 		{
-			AsynchronousClient.Send(AsynchronousClient.client,"Disconnect|" + 0 + "|" +0 + "|<EOF>", send_so);
+			AsynchronousClient.Send(AsynchronousClient.client,"Disconnect|" + AsynchronousClient.instance.session + "|" 
+			                        + instance.playerNum + "|<EOF>", send_so);
 		}
 		send_so.sendDone.WaitOne(5000);
 

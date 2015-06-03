@@ -207,10 +207,7 @@ public static string guiDebugStr = "";
 				if(clientInfo.client == client)
 				{
 					clientInfo.session = int.Parse(token[1]);
-					if(ServerLevelManager.instance.sessionMap.ContainsKey(clientInfo.session))
-					{
-						
-					}
+					
 				}
 			}
 					
@@ -223,9 +220,9 @@ public static string guiDebugStr = "";
 		}
 		else if(token[0] == "Loaded")
 		{
-		
+			
 			ServerAction.logedPlayer = client;
-			ServerAction.session = 1;
+			//ServerAction.session = 1;
 			
 		}
 		else if(token[0] == "Chat")
@@ -268,7 +265,7 @@ public static string guiDebugStr = "";
 		}
 		else if(token[0] == "Disconnect")
 		{
-			guiDebugStr = "Got to if";
+			guiDebugStr = message;
 			//logedClients.Remove(client);
 			PlayerAction action = new PlayerAction();
 			action.client = client;

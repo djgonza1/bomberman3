@@ -116,6 +116,7 @@ public class ClientLevelManager : MonoBehaviour
 	{
 
 		this.playerNum = playerNum;
+		AsynchronousClient.instance.playerNum = playerNum;
 		int index = playerNum - 1;
 		
 		scoreGuys[index].SetActive(true);
