@@ -9,12 +9,17 @@ using System.Collections;
 public class Controls : MonoBehaviour {
 	public float runSpeed = 8f;
 	public GameObject bomb;
-
+	public AudioClip walk;
+	public AudioClip bombSet;
+	public AudioClip deathSound;
+    private AudioSource source;
 	private Animator animator;
 	public Character _Character;
-
+	private float soundBuffer;
+	public float walkBuffer;
 	private Character bomberman;
 	private Rigidbody2D rigidBody;
+	private float WALK = 0.2f;
 	
 	private float timer;
 	private bool moved = false;
@@ -25,20 +30,31 @@ public class Controls : MonoBehaviour {
 		rigidBody = this.GetComponent<Rigidbody2D>();
 
 		_Character = GetComponent<Character> ();
-
+		soundBuffer = 2;
+		walkBuffer = WALK;
 	}
 	void Awake()
 	{
 		animator = GetComponent<Animator> ();
-		
+        source = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () 
 	{
+		if (_Character.dying&&soundBuffer==2) {
+			source.PlayOneShot(deathSound);
+			soundBuffer=0;
+		}
+		if (soundBuffer < 2) {
+			soundBuffer = soundBuffer+Time.deltaTime;
+		}
+		if (walkBuffer <= WALK) {
+			walkBuffer = walkBuffer+Time.deltaTime;
+		}
+
 		//character can not move during dying animation
-	if (!_Character.dying) // && ClientLevelManager.instance.gameState == GameState.Playing) 
-	{
+		if (!_Character.dying) { // && ClientLevelManager.instance.gameState == GameState.Playing)
 			if (Input.GetKeyDown (KeyCode.UpArrow)) {
 				animator.SetTrigger ("Up");
 			}
@@ -53,27 +69,48 @@ public class Controls : MonoBehaviour {
 			}
 		
 			if (Input.GetKey (KeyCode.UpArrow)) {
+				if(walkBuffer > WALK)
+				{
+					source.PlayOneShot(walk);
+					walkBuffer=0;
+				}
 				//transform.Translate(new Vector2(0,runSpeed*Time.deltaTime));
 				rigidBody.MovePosition ((Vector2)this.transform.position + new Vector2 (0, 1) * runSpeed * Time.deltaTime);
 				moved = true;
 				
 			}
 			if (Input.GetKey (KeyCode.DownArrow)) {
+				if(walkBuffer > WALK)
+				{
+				source.PlayOneShot(walk);
+					walkBuffer=0;
+				}
 				//transform.Translate(new Vector2(0,-runSpeed*Time.deltaTime));
 				rigidBody.MovePosition ((Vector2)this.transform.position + new Vector2 (0, -1) * runSpeed * Time.deltaTime);
 				moved = true;
 			}
 			if (Input.GetKey (KeyCode.LeftArrow)) {
+				if(walkBuffer > WALK)
+				{
+					source.PlayOneShot(walk);
+					walkBuffer=0;
+				}
 				//transform.Translate(new Vector2(-runSpeed*Time.deltaTime,0));
 				rigidBody.MovePosition ((Vector2)this.transform.position + new Vector2 (-1, 0) * runSpeed * Time.deltaTime);
 				moved = true;
 			}
 			if (Input.GetKey (KeyCode.RightArrow)) {
+				if(walkBuffer > WALK)
+				{
+					source.PlayOneShot(walk);
+					walkBuffer=0;
+				}
 				//transform.Translate(new Vector2(runSpeed*Time.deltaTime,0));
 				rigidBody.MovePosition ((Vector2)this.transform.position + new Vector2 (1, 0) * runSpeed * Time.deltaTime);
 				moved = true;
 			}
-
+				
+			
 
 
 //			if (Input.GetKey (KeyCode.UpArrow)) {
@@ -98,8 +135,7 @@ public class Controls : MonoBehaviour {
 //
 //			}
 
-			if (Input.GetKeyDown (KeyCode.Space)) 
-			{
+			if (Input.GetKeyDown (KeyCode.Space)) {
 				
 				
 				float x = Mathf.Round (this.transform.position.x);
@@ -117,14 +153,14 @@ public class Controls : MonoBehaviour {
 				}
 			
 				if (bomberman.liveBombs < bomberman.bombLimit && !bombPlaced) {
-				
-					string content = "BombDropped|" +AsynchronousClient.instance.session + "|" + ClientLevelManager.instance.playerNum + "|" 
-									+ x.ToString() + "|" + y.ToString() + "|<EOF>";
+					source.PlayOneShot (bombSet);
+					string content = "BombDropped|" + AsynchronousClient.instance.session + "|" + ClientLevelManager.instance.playerNum + "|" 
+						+ x.ToString () + "|" + y.ToString () + "|<EOF>";
 					StateObject send_so = new StateObject ();
 					send_so.workSocket = AsynchronousClient.client;
 					AsynchronousClient.Send (AsynchronousClient.client, content, send_so);
 					
-					bomberman.DropBomb (x,y);
+					bomberman.DropBomb (x, y);
 					bomberman.liveBombs++;
 				}
 
@@ -142,10 +178,9 @@ public class Controls : MonoBehaviour {
 //			
 //			}
 			
-			if(timer > 0.02)
-			{
+			if (timer > 0.02) {
 				if (moved) {
-					string content =  "PlayerPos|" + AsynchronousClient.instance.session 
+					string content = "PlayerPos|" + AsynchronousClient.instance.session 
 						+ "|" + ClientLevelManager.instance.playerNum + "|" + this.transform.position.x.ToString () 
 						+ "|" + this.transform.position.y.ToString () + "|<EOF>";
 					StateObject send_so = new StateObject ();
